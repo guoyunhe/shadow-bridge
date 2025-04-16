@@ -16,21 +16,21 @@ export function wrap(Comp: ComponentType<any>) {
     }
 
     mount(initProps: any) {
-      const { eventTarget, shadowRoot } = this;
+      const that = this;
 
       const Wrapper = () => {
         const [props, setProps] = useState(initProps);
         useEffect(() => {
           const handleUpdate = (e: Event) => {
             setProps((e as CustomEvent).detail);
-            console.log((e as CustomEvent).detail);
+            console.log('handle update', (e as CustomEvent).detail);
           };
-          eventTarget.addEventListener('update', handleUpdate);
+          that.addEventListener('update', handleUpdate);
           return () => {
-            eventTarget.removeEventListener('update', handleUpdate);
+            that.removeEventListener('update', handleUpdate);
           };
         }, []);
-        return <Comp shadowRoot={shadowRoot} {...props} />;
+        return <Comp shadowRoot={that.shadowRoot} {...props} />;
       };
 
       this.reactRoot.render(<Wrapper />);
@@ -38,7 +38,8 @@ export function wrap(Comp: ComponentType<any>) {
     }
 
     update(nextProps: any) {
-      this.eventTarget.dispatchEvent(new CustomEvent('update', { detail: nextProps }));
+      console.log('dispatch update');
+      this.dispatchEvent(new CustomEvent('update', { detail: nextProps }));
     }
 
     unmount() {

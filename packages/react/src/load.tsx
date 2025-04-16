@@ -56,7 +56,7 @@ export function load<Props>({ script, styles, loadingFallback, failedFallback }:
     }, []);
 
     useEffect(() => {
-      if (!loading && sbRef.current) {
+      if (sbRef.current) {
         if (sbRef.current.mounted) {
           sbRef.current.update(props);
         } else {

@@ -1,8 +1,9 @@
-export class ShadowBridge {
+export class ShadowBridge extends EventTarget {
   mounted = false;
   shadowRoot: ShadowRoot;
 
   constructor(shadowRoot: ShadowRoot) {
+    super();
     this.shadowRoot = shadowRoot;
   }
 
