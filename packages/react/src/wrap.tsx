@@ -23,6 +23,7 @@ export function wrap(Comp: ComponentType<any>) {
         useEffect(() => {
           const handleUpdate = (e: Event) => {
             setProps((e as CustomEvent).detail);
+            console.log((e as CustomEvent).detail);
           };
           eventTarget.addEventListener('update', handleUpdate);
           return () => {
