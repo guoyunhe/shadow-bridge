@@ -1,5 +1,7 @@
 export class ShadowBridge {
+  mounted = false;
   shadowRoot: ShadowRoot;
+
   constructor(shadowRoot: ShadowRoot) {
     this.shadowRoot = shadowRoot;
   }
