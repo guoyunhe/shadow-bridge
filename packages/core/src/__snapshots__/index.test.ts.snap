@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`members > match snapshot 1`] = `
+{
+  "ShadowBridge": [Function],
+}
+`;
