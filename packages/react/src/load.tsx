@@ -17,10 +17,6 @@ export function load<Props>({ script, styles, loadingFallback, failedFallback }:
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-      if (rootRef.current && !rootRef.current?.shadowRoot) {
-        rootRef.current.attachShadow({ mode: 'open' });
-      }
-
       setLoading(true);
 
       if (rootRef.current?.shadowRoot && styles) {
@@ -34,13 +30,22 @@ export function load<Props>({ script, styles, loadingFallback, failedFallback }:
 
       import(script)
         .then(({ default: SB }) => {
-          sbRef.current = new SB(rootRef.current!.shadowRoot);
+          if (rootRef.current) {
+            if (!rootRef.current?.shadowRoot) {
+              rootRef.current.attachShadow({ mode: 'open' });
+            }
+            sbRef.current = new SB(rootRef.current!.shadowRoot);
+          }
         })
         .catch((e) => {
-          setError(e);
+          if (rootRef.current) {
+            setError(e);
+          }
         })
         .finally(() => {
-          setLoading(false);
+          if (rootRef.current) {
+            setLoading(false);
+          }
         });
 
       return () => {
