@@ -1,81 +1,118 @@
-# ShadowBridge
+# @shadow-bridge/react
 
-Only concept design, no implementation, yet.
+![Version](https://img.shields.io/npm/v/@shadow-bridge/react)
+![Downloads](https://img.shields.io/npm/dw/@shadow-bridge/react)
+![Bundle size](https://img.shields.io/bundlephobia/minzip/@shadow-bridge/react)
 
-- Use [ShadowRoot] to isolate styles and avoid pollution
-- Use dynamic import to load ESM or UMD other than `eval()` (slow CPU and waste RAM)
+## Install
 
-## Make a ShadowBridge component
+```bash
+npm i -S @shadow-bridge/react
+```
+
+## Wrap a React component into a ShadowBridge component
 
 Write a React component:
 
 ```jsx
-// src/foobar.jsx
-import { make } from '@shadow-bridge/react';
+// src/antd.tsx
+import { StyleProvider } from '@ant-design/cssinjs';
+import { wrap } from '@shadow-bridge/react';
+import { Button, ConfigProvider, Empty, Input, Modal } from 'antd';
+import './antd.css';
 
-export default function Foobar({ foo, bar }) {
+export interface AntdBlockProps {
+  // 💡 ShadowBridge will always pass shadowRoot prop to the component
+  shadowRoot?: ShadowRoot;
+
+  open: boolean;
+  onCancel: () => void;
+  onOk: () => void;
+}
+
+export function AntdBlock({ open, onCancel, onOk, shadowRoot }: AntdBlockProps) {
   return (
-    <div>
-      {foo}, {bar}
-    </div>
+    <StyleProvider
+      // 💡 Mount css-in-js <style> under shadowRoot
+      container={shadowRoot}
+    >
+      <ConfigProvider
+        // 💡 Mount popups (modal, message, notice, tooltip) under shadowRoot
+        getPopupContainer={() => (shadowRoot as any) || document.body}
+      >
+        <Input placeholder="Input" />
+        <Button>Button</Button>
+        <Modal title="Modal" open={open} onOk={onOk} onCancel={onCancel}>
+          <Empty />
+        </Modal>
+      </ConfigProvider>
+    </StyleProvider>
   );
 }
 
-// this special export make it shadow-bridge loadable
-export const __SB__ = make(Foobar);
+// 💡 Wrap component with ShadowBridge
+export default wrap(AntdBlock);
 ```
 
 Build ESM or UMD output:
 
 ```js
 // vite.config.ts
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 
+// 💡 More config options see https://vite.dev/config/
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/foobar.jsx',
-      formats: ['es'], // or umd
-      fileName: 'foobar',
-      cssFileName: 'foobar',
+      entry: ['./src/antd.tsx'],
+      // 💡 Use ESM or UMD
+      formats: ['es'],
+      fileName: 'antd',
     },
+  },
+  define: {
+    // 💡 Fix `process is not defined` error thrown by React
+    'process.env': {},
+  },
+  plugins: [react()],
+  server: {
+    open: true,
   },
 });
 ```
 
-> ⚠️ Do **NOT** external react or react-dom, since we may load the component in vue or preact apps
-
-Publish output assets to web server. You will need the full URL of css and js:
-
-- https://example.com/assets/foobar.css
-- https://example.com/assets/foobar.js
-
-TODO:
-
-- Preact + Vite
-- React + Webpack
-- Vue + Vite
-
-## Load a ShadowBridge component
+## Load a ShadowBridge component as a React component
 
 ```jsx
 import { load } from '@shadow-bridge/react';
+import { useState } from 'react';
 
-const Foobar = load({
-  script: 'https://example.com/assets/foobar.js',
-  style: 'https://example.com/assets/foobar.css',
-  loadingFallback: <div>Loading...</div>,
-  failedFallback: (error, reload) => (
-    <div>
-      Failed to load. (Error: {error.message}) <button onClick={reload}>Retry</button>
-    </div>
-  ),
-});
+const AntdBlock =
+  load <
+  any >
+  {
+    script: 'https://guoyunhe.github.io/sb-react-component-vite-example/antd.js',
+    styles: ['https://guoyunhe.github.io/sb-react-component-vite-example/antd.css'],
+    loadingFallback: () => <span>Loading</span>,
+    failedFallback: (error) => <span>Failed to load: {error.message}</span>,
+  };
 
-function App() {
+export default function App() {
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
-      <Foobar foo="Hello" bar="World" />
+      <button onClick={() => setOpen(true)}>Open Ant Design Modal</button>
+      <AntdBlock
+        open={open}
+        onCancel={() => {
+          setOpen(false);
+        }}
+        onOk={() => {
+          setOpen(false);
+        }}
+      />
     </div>
   );
 }

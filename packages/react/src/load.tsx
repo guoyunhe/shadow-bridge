@@ -1,4 +1,4 @@
-import { ShadowBridge } from '@shadow-bridge/core';
+import type { ShadowBridge } from '@shadow-bridge/core';
 import cn from 'classnames';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 

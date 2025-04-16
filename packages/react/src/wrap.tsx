@@ -4,16 +4,9 @@ import { createRoot, Root } from 'react-dom/client';
 
 export function wrap(Comp: ComponentType<any>) {
   return class ReactShadowBridge extends ShadowBridge {
-    reactRoot: Root;
+    rootElement: HTMLElement | null = null;
+    reactRoot: Root | null = null;
     eventTarget = new EventTarget();
-
-    constructor(shadowRoot: ShadowRoot) {
-      super(shadowRoot);
-      const rootElement = document.createElement('div');
-      rootElement.className = 'shadow-bridge-react-root';
-      shadowRoot.appendChild(rootElement);
-      this.reactRoot = createRoot(rootElement);
-    }
 
     mount(initProps: any) {
       const that = this;
@@ -23,7 +16,6 @@ export function wrap(Comp: ComponentType<any>) {
         useEffect(() => {
           const handleUpdate = (e: Event) => {
             setProps((e as CustomEvent).detail);
-            console.log('handle update', (e as CustomEvent).detail);
           };
           that.addEventListener('update', handleUpdate);
           return () => {
@@ -33,17 +25,21 @@ export function wrap(Comp: ComponentType<any>) {
         return <Comp shadowRoot={that.shadowRoot} {...props} />;
       };
 
+      const rootElement = document.createElement('div');
+      rootElement.className = 'shadow-bridge-react-root';
+      this.shadowRoot.appendChild(rootElement);
+      this.reactRoot = createRoot(rootElement);
       this.reactRoot.render(<Wrapper />);
       this.mounted = true;
     }
 
     update(nextProps: any) {
-      console.log('dispatch update');
       this.dispatchEvent(new CustomEvent('update', { detail: nextProps }));
     }
 
     unmount() {
-      this.reactRoot.unmount();
+      this.reactRoot?.unmount();
+      this.rootElement?.remove();
       this.mounted = false;
     }
   };
