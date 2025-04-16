@@ -32,19 +32,21 @@ export function load<Props>({
     useEffect(() => {
       setLoading(true);
 
+      if (!rootRef.current?.shadowRoot) {
+        rootRef.current?.attachShadow({ mode: 'open' });
+      }
+
+      for (const style of styles) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = style;
+        rootRef.current?.shadowRoot?.append(link);
+      }
+
       import(script)
         .then(({ default: SB }) => {
           if (rootRef.current) {
-            if (!rootRef.current?.shadowRoot) {
-              rootRef.current.attachShadow({ mode: 'open' });
-            }
-            for (const style of styles) {
-              const link = document.createElement('link');
-              link.rel = 'stylesheet';
-              link.href = style;
-              rootRef.current.shadowRoot!.append(link);
-            }
-            sbRef.current = new SB(rootRef.current!.shadowRoot);
+            sbRef.current = new SB(rootRef.current.shadowRoot);
           }
         })
         .catch((e) => {
@@ -76,10 +78,11 @@ export function load<Props>({
     }, [props, loading]);
 
     return (
-      <div ref={rootRef} className={cn('shadow-bridge-react-host', (props as any).className)}>
+      <>
+        <div ref={rootRef} className={cn('shadow-bridge-react-host', (props as any).className)} />
         {loading && loadingFallback?.()}
         {error && failedFallback?.(error)}
-      </div>
+      </>
     );
   };
 
