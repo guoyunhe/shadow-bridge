@@ -19,20 +19,19 @@ export function load<Props>({ script, styles, loadingFallback, failedFallback }:
     useEffect(() => {
       setLoading(true);
 
-      if (rootRef.current?.shadowRoot && styles) {
-        for (const style of styles) {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = style;
-          rootRef.current.shadowRoot.append(link);
-        }
-      }
-
       import(script)
         .then(({ default: SB }) => {
           if (rootRef.current) {
             if (!rootRef.current?.shadowRoot) {
               rootRef.current.attachShadow({ mode: 'open' });
+            }
+            if (styles) {
+              for (const style of styles) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = style;
+                rootRef.current.shadowRoot!.append(link);
+              }
             }
             sbRef.current = new SB(rootRef.current!.shadowRoot);
           }
