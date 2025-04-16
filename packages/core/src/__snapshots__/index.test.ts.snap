@@ -3,5 +3,6 @@
 exports[`members > match snapshot 1`] = `
 {
   "ShadowBridge": [Function],
+  "prefetch": [Function],
 }
 `;

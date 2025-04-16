@@ -1,15 +1,28 @@
 import type { ShadowBridge } from '@shadow-bridge/core';
+import { prefetch as prefetchFn } from '@shadow-bridge/core';
 import cn from 'classnames';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 export interface LoadOptions {
   script: string;
   styles?: string[];
+  /** Prefetch script and styles before mounting */
+  prefetch?: boolean;
   loadingFallback?: () => ReactNode;
   failedFallback?: (error: Error) => ReactNode;
 }
 
-export function load<Props>({ script, styles, loadingFallback, failedFallback }: LoadOptions) {
+export function load<Props>({
+  script,
+  styles = [],
+  prefetch,
+  loadingFallback,
+  failedFallback,
+}: LoadOptions) {
+  if (prefetch) {
+    prefetchFn([script, ...styles]);
+  }
+
   const Wrapper: FC<Props> = (props) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const sbRef = useRef<ShadowBridge>();
@@ -25,13 +38,11 @@ export function load<Props>({ script, styles, loadingFallback, failedFallback }:
             if (!rootRef.current?.shadowRoot) {
               rootRef.current.attachShadow({ mode: 'open' });
             }
-            if (styles) {
-              for (const style of styles) {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = style;
-                rootRef.current.shadowRoot!.append(link);
-              }
+            for (const style of styles) {
+              const link = document.createElement('link');
+              link.rel = 'stylesheet';
+              link.href = style;
+              rootRef.current.shadowRoot!.append(link);
             }
             sbRef.current = new SB(rootRef.current!.shadowRoot);
           }
