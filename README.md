@@ -2,6 +2,9 @@
 
 Only concept design, no implementation, yet.
 
+- Use [ShadowRoot] to isolate styles and avoid pollution
+- Use dynamic import to load ESM or UMD other than `eval()` (slow CPU and waste RAM)
+
 ## Make a ShadowBridge component
 
 Write a React component:
@@ -77,3 +80,5 @@ function App() {
   );
 }
 ```
+
+[ShadowRoot]: https://developer.mozilla.org/docs/Web/API/ShadowRoot
