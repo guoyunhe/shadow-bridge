@@ -1,9 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { React } from '.';
+import * as members from '.';
 
-describe('React', () => {
-  it('render', async () => {
-    render(<React>foobar</React>);
-    await screen.findByText('foobar');
+describe('members', () => {
+  it('match snapshot', async () => {
+    expect(members).toMatchSnapshot();
   });
 });
