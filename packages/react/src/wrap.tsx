@@ -9,7 +9,10 @@ export function wrap(Comp: ComponentType<any>) {
 
     constructor(shadowRoot: ShadowRoot) {
       super(shadowRoot);
-      this.reactRoot = createRoot(this.shadowRoot);
+      const rootElement = document.createElement('div');
+      rootElement.className = 'shadow-bridge-react-root';
+      shadowRoot.appendChild(rootElement);
+      this.reactRoot = createRoot(rootElement);
     }
 
     mount(initProps: any) {
@@ -18,8 +21,8 @@ export function wrap(Comp: ComponentType<any>) {
       const Wrapper = () => {
         const [props, setProps] = useState(initProps);
         useEffect(() => {
-          const handleUpdate = (e: CustomEvent) => {
-            setProps(e.detail);
+          const handleUpdate = (e: Event) => {
+            setProps((e as CustomEvent).detail);
           };
           eventTarget.addEventListener('update', handleUpdate);
           return () => {
@@ -30,6 +33,7 @@ export function wrap(Comp: ComponentType<any>) {
       };
 
       this.reactRoot.render(<Wrapper />);
+      this.mounted = true;
     }
 
     update(nextProps: any) {
@@ -38,6 +42,7 @@ export function wrap(Comp: ComponentType<any>) {
 
     unmount() {
       this.reactRoot.unmount();
+      this.mounted = false;
     }
   };
 }

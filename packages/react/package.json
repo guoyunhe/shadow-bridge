@@ -42,7 +42,8 @@
     ]
   },
   "dependencies": {
-    "@shadow-bridge/core": "workspace:^"
+    "@shadow-bridge/core": "workspace:^",
+    "classnames": "^2.5.1"
   },
   "devDependencies": {
     "@mdx-js/react": "^3.1.0",
