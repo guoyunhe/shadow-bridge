@@ -44,7 +44,8 @@ export function load<Props>({
         this.rootRef.current?.shadowRoot?.append(link);
       }
 
-      import(script)
+      // Tell webpack to not resolve script
+      import(/* webpackIgnore: true */ script)
         .then(({ default: SB }) => {
           if (this.rootRef.current) {
             this.sb = new SB(this.rootRef.current.shadowRoot);
