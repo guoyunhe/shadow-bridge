@@ -16,7 +16,7 @@ npm i -S @shadow-bridge/react
 
 Write a React component:
 
-```jsx
+```tsx static
 // src/antd.tsx
 import { StyleProvider } from '@ant-design/cssinjs';
 import { wrap } from '@shadow-bridge/react';
@@ -100,7 +100,7 @@ const AntdBlock = load<any>({
   failedFallback: (error) => <span>Failed to load: {error.message}</span>,
 });
 
-export default function App() {
+function App() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -118,6 +118,8 @@ export default function App() {
     </div>
   );
 }
+
+render(<App />);
 ```
 
 [ShadowRoot]: https://developer.mozilla.org/docs/Web/API/ShadowRoot
