@@ -47,6 +47,9 @@
       "stylelint-prettier/recommended"
     ]
   },
+  "dependencies": {
+    "@shadow-bridge/core": "workspace:^"
+  },
   "devDependencies": {
     "@mdx-js/react": "^3.1.0",
     "@types/node": "^20.17.30",
@@ -70,7 +73,8 @@
     "stylelint-config-ali": "^2.1.2",
     "stylelint-prettier": "^5.0.3",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "vue": "^3.5.13"
   },
   "rive": {
     "template": "web",
