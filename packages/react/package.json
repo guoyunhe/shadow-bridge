@@ -1,6 +1,6 @@
 {
   "name": "@shadow-bridge/react",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "homepage": "https://github.com/guoyunhe/shadow-bridge#readme",
   "bugs": {
     "url": "https://github.com/guoyunhe/shadow-bridge/issues"
@@ -74,9 +74,6 @@
     "stylelint-prettier": "^5.0.3",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0"
   },
   "rive": {
     "template": "react",
