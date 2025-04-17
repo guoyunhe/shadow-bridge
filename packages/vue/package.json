@@ -1,4 +1,6 @@
 {
+  "name": "@shadow-bridge/vue",
+  "version": "0.1.0",
   "homepage": "https://github.com/guoyunhe/shadow-bridge#readme",
   "bugs": {
     "url": "https://github.com/guoyunhe/shadow-bridge/issues"
