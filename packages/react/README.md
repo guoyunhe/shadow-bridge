@@ -10,7 +10,9 @@
 npm i -S @shadow-bridge/react
 ```
 
-## Wrap a React component into a ShadowBridge component
+## Wrap a React component into a SB component
+
+> ⚠️ Require React 18+
 
 Write a React component:
 
@@ -82,7 +84,9 @@ export default defineConfig({
 });
 ```
 
-## Load a ShadowBridge component as a React component
+## Load a SB component as a React component
+
+> ⚠️ Require React 15+
 
 ```tsx
 import { load } from '@shadow-bridge/react';
