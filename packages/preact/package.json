@@ -88,5 +88,6 @@
     "doc": {
       "basename": "/preact/"
     }
-  }
+  },
+  "version": "0.1.0"
 }
