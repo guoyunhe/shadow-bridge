@@ -12,6 +12,7 @@
     "name": "Guo Yunhe",
     "email": "i@guoyunhe.me"
   },
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
