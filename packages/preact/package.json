@@ -1,0 +1,86 @@
+{
+  "homepage": "https://github.com/guoyunhe/shadow-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/guoyunhe/shadow-bridge/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guoyunhe/shadow-bridge.git"
+  },
+  "funding": "https://github.com/sponsors/guoyunhe",
+  "author": {
+    "name": "Guo Yunhe",
+    "email": "i@guoyunhe.me"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rive build",
+    "build:watch": "rive build --watch",
+    "ci:eslint": "eslint -f json src -o ./.ci/eslint.json",
+    "lint": "eslint . && stylelint \"**/*.{css,less,scss}\"",
+    "lint:fix": "prettier --write . && eslint --fix . && stylelint --fix \"**/*.{css,less,scss}\"",
+    "prepare": "husky",
+    "start": "rive start",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest"
+  },
+  "lint-staged": {
+    "*.{cjs,cts,js,jsx,mjs,mts,ts,tsx,vue}": "eslint --fix",
+    "*.{css,less,scss}": "stylelint --fix",
+    "*.{cjs,css,cts,html,js,json,jsx,less,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}": "prettier --write"
+  },
+  "prettier": "prettier-config-ali",
+  "stylelint": {
+    "extends": [
+      "stylelint-config-ali",
+      "stylelint-prettier/recommended"
+    ]
+  },
+  "devDependencies": {
+    "@mdx-js/react": "^3.1.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/preact": "^3.2.4",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.17.30",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitest/ui": "^3.1.1",
+    "eslint": "^9.25.0",
+    "eslint-config-ali": "^16.1.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "happy-dom": "^17.4.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "preact": "^10.26.5",
+    "prettier": "^3.5.3",
+    "prettier-config-ali": "^1.3.2",
+    "react": "^18.3.1",
+    "react-doc-ui": "^2.3.0",
+    "react-dom": "^18.3.1",
+    "rive": "^3.0.1",
+    "stylelint": "^16.18.0",
+    "stylelint-config-ali": "^2.1.2",
+    "stylelint-prettier": "^5.0.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "rive": {
+    "template": "preact",
+    "doc": {
+      "basename": "/preact/"
+    }
+  }
+}
