@@ -6,7 +6,6 @@ export function wrap(Comp: ComponentType<any>) {
   return class ReactShadowBridge extends ShadowBridge {
     rootElement: HTMLElement | null = null;
     reactRoot: Root | null = null;
-    eventTarget = new EventTarget();
 
     mount(initProps: any) {
       const that = this;
@@ -25,10 +24,10 @@ export function wrap(Comp: ComponentType<any>) {
         return <Comp shadowRoot={that.shadowRoot} {...props} />;
       };
 
-      const rootElement = document.createElement('div');
-      rootElement.className = 'shadow-bridge-react-root';
-      this.shadowRoot.appendChild(rootElement);
-      this.reactRoot = createRoot(rootElement);
+      this.rootElement = document.createElement('div');
+      this.rootElement.className = 'shadow-bridge-react-root';
+      this.shadowRoot.appendChild(this.rootElement);
+      this.reactRoot = createRoot(this.rootElement);
       this.reactRoot.render(<Wrapper />);
       this.mounted = true;
     }
